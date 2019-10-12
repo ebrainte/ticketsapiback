@@ -8,7 +8,7 @@ var app = express();
 
 //conectar BD
 //var urlBD = 'mongodb://localhost/test';
-var urlBD = "mongodb+srv://test:test1234@cluster0-apezn.mongodb.net/Agenda?retryWrites=true";
+var urlBD = "mongodb+srv://apitickets:OsylkRfjHJkK0zvK@apitickets-yb4pe.gcp.mongodb.net/test?retryWrites=true&w=majority";
 
 //opciones conexion
 var opts = {useNewUrlParser : true, connectTimeoutMS:20000};
