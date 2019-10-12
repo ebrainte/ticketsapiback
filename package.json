@@ -1,0 +1,26 @@
+{
+  "name": "ticketsapiback",
+  "version": "0.0.1",
+  "description": "backend api tickets",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ebrainte/ticketsapiback.git"
+  },
+  "author": "los mas grosos",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/ebrainte/ticketsapiback/issues"
+  },
+  "homepage": "https://github.com/ebrainte/ticketsapiback#readme",
+  "devDependencies": {
+    "nodemon": "^1.19.3"
+  },
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
