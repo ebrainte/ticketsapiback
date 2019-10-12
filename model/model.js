@@ -14,6 +14,6 @@ var ticketSchema = new Schema({
     descuento: Number
 });
 
-var Tickets = mongoose.model('Ticket', contactoSchema);
+var Tickets = mongoose.model('Ticket', ticketSchema);
 console.log("se creo modelo");
 module.exports = Tickets;
