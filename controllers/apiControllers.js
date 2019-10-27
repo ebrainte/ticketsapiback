@@ -1,16 +1,19 @@
-var Contactos = require('../model/model');
+var Events = require('../model/modelEvent');
 var bodyParser = require('body-parser');
+var request = require("request")
+const rp = require('request-promise')
 
     
-let getContactos = (req, res) =>
+let getEvents = (req, res) =>
 {      
-    console.log("llegue a leer");
+    console.log("Listado de Platos");
     //Listar resultados
-    Contactos.find(function(err,listaContactos)
+    
+    Events.find(function(err,listaEventos)
     {
         //devuelvo resultado query   
         //console.log(listaContactos); 
-        res.status(200).send(listaContactos);
+        res.status(200).send(listaEventos);
         //si hay error
         (err)=>{
             res.status(500).send(err);
@@ -19,45 +22,99 @@ let getContactos = (req, res) =>
     });
            
 };
-let getContactosById = (req, res) =>
+
+
+let getEventsbyName = (req, res) =>
 {      
-    console.log("llegue a leer con filtro");
+    console.log("lectura de eventos por nombre");
     //Obtener id busqueda
-    let idBusqueda = {dni: req.body.dniBuscado};
-    console.log(idBusqueda);
+    let name = {eventName: { $regex: '.*' + req.body.eventName + '.*', $options: 'i' } };
+    console.log("ahora viene la variable");
+    console.log(name);
     //Listar resultados
-    Contactos.find(idBusqueda,function(err,todo)
-    {
-        (listaContactos)=>
-        {
-            res.status(200).send(listaContactos); //devuelvo resultado query   
-            //console.log(listaContactos);    
-        },
-        (err)=>
-        {
-            res.status(500).send(err);
+
+    Events.find(name, (err, text) =>{
+        if (err){
             console.log(err);
+            return res.status(500).send(text);
+        }
+        else{
+            console.log(text);
+            return res.status(200).send(text);
         }
     })
-      
 };
 
-let insertContacto = (req,res) =>
+
+let getEventsAutocomplete = (req, res) =>
+{      
+    console.log("autocomplete");
+    //Obtener id busqueda
+    let name = {eventName: { $regex: '.*' + req.body.eventName + '.*', $options: 'i' } };
+    console.log("ahora viene la variable");
+    console.log(name);
+    //Listar resultados
+
+    Events.findOne(name,{eventName: true}, (err, text) =>{
+        if (err){
+            console.log(err);
+            return res.status(500).send(text);
+        }
+        else{
+            console.log(text);
+            return res.status(200).send(text);
+        }
+    })      
+};
+
+let getDistanceBetweenAddresses = (req, res) =>
+{      
+    console.log("distancia entre direcciones");
+    //Obtener id busqueda
+    let originAddr = req.body.originAddr;
+    let destAddr = req.body.destAddr;
+    console.log(originAddr);
+    console.log(destAddr);
+    var url = "https://maps.googleapis.com/maps/api/directions/json?origin=" + originAddr + "&destination=" + destAddr + "&key=AIzaSyBHfXPuQY3IGXBEFXzZ3Oo3HDqilYNVFv4"
+    console.log(url);
+    // var url = "https://maps.googleapis.com/maps/api/directions/json?origin=41.43206,-81.38992&destination=42.43206,-81.38992&key=AIzaSyBHfXPuQY3IGXBEFXzZ3Oo3HDqilYNVFv4"
+    let options = {json: true};
+
+
+    rp({
+        uri: "https://maps.googleapis.com/maps/api/directions/json?origin=" + originAddr + "&destination=" + destAddr + "&key=AIzaSyBHfXPuQY3IGXBEFXzZ3Oo3HDqilYNVFv4",
+        json: true
+      })
+        .then((data) => {
+          obj = data.routes[0].legs[0].distance.text;
+          res.status(200).send(obj)
+        })
+        .catch((err) => {
+          console.log(err)
+        })      
+};
+
+let insertEvent = (req,res) =>
 {
     console.log(req.body);
-    var newContacto = Contactos({
-        nombre: req.body.nombre,
-        domicilio: req.body.domicilio,
-        cumple: req.body.cumple,
-        dni: req.body.dni,
-        mail: req.body.mail
+
+    var newEvent = Events({
+        eventName: req.body.eventName,
+        eventDate: req.body.eventDate,
+        eventType: req.body.eventType,
+        eventLocation: req.body.eventLocation,
+        eventAddress: req.body.eventAddress,
+        eventDescription: req.body.eventDescription,
+        eventPricing: req.body.eventPricing,
+        imageUrl: req.body.imageUrl,
+        starAverage: req.body.starAverage
     });
-    newContacto.save().
+    newEvent.save().
     then
     (
-        (newContacto)=>
+        (newEvent)=>
         {
-            res.status(200).send(newContacto); //devuelvo resultado query       
+            res.status(200).send(newEvent); //devuelvo resultado query       
         },
         (err)=>
         { 
@@ -66,13 +123,58 @@ let insertContacto = (req,res) =>
         }
     ) 
 }
-let updateContacto = (req,res) => 
+
+
+let getEventsbyType = (req, res) =>
+{      
+    console.log("lectura de eventos por tipo");
+    //Obtener id busqueda
+    let name = {eventType: { $regex: '.*' + req.body.eventType + '.*', $options: 'i' } };
+    console.log("ahora viene la variable");
+    console.log(name);
+    //Listar resultados
+
+    Events.find(name, (err, text) =>{
+        if (err){
+            console.log(err);
+            return res.status(500).send(text);
+        }
+        else{
+            console.log(text);
+            return res.status(200).send(text);
+        }
+    })
+};
+
+let getEventsbyLocation = (req, res) =>
+{      
+    console.log("lectura de eventos por ubicacion");
+    //Obtener id busqueda
+    let name = {eventLocation: { $regex: '.*' + req.body.eventLocation + '.*', $options: 'i' } };
+    console.log("ahora viene la variable");
+    console.log(name);
+    //Listar resultados
+
+    Events.find(name, (err, text) =>{
+        if (err){
+            console.log(err);
+            return res.status(500).send(text);
+        }
+        else{
+            console.log(text);
+            return res.status(200).send(text);
+        }
+    })
+};
+
+
+let updateEventName = (req,res) => 
 {
-    let id = { dni : req.body.dniBuscado};
+    let id = { id : req.body.id};
    
     console.log("update",id);
    // console.log(newContacto);
-    Contactos.findOneAndUpdate({ dni : req.body.dniBuscado},{$set : {nombre: req.body.newData.nombre}},{new:true},function(err)
+    Events.findOneAndUpdate({ _id : req.body.id},{$set : {eventName: req.body.restaurantName}},{new:true},function(err)
     {
        //console.log("respuesta",res);
        //let rta = {estado: "Ok"};
@@ -101,5 +203,5 @@ let deleteContacto = (req,res)=>
            
    
 }
-module.exports = {getContactos,insertContacto,updateContacto,deleteContacto,getContactosById};
+module.exports = {getEvents,getEventsbyName,getEventsAutocomplete,insertEvent,getEventsbyType,getEventsbyLocation,updateEventName,deleteContacto,getDistanceBetweenAddresses};
 
