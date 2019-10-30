@@ -46,6 +46,28 @@ let getEventsbyName = (req, res) =>
 };
 
 
+let getEventsbyId = (req, res) =>
+{      
+    console.log("lectura de eventos por id");
+    //Obtener id busqueda
+    let name = {_id:  req.body.id };
+    console.log("ahora viene la variable");
+    console.log(req.body.id);
+    //Listar resultados
+
+    Events.find(name, (err, text) =>{
+        if (err){
+            console.log(err);
+            return res.status(500).send(text);
+        }
+        else{
+            console.log(text);
+            return res.status(200).send(text);
+        }
+    })
+};
+
+
 let getEventsAutocomplete = (req, res) =>
 {      
     console.log("autocomplete");
@@ -203,5 +225,5 @@ let deleteContacto = (req,res)=>
            
    
 }
-module.exports = {getEvents,getEventsbyName,getEventsAutocomplete,insertEvent,getEventsbyType,getEventsbyLocation,updateEventName,deleteContacto,getDistanceBetweenAddresses};
+module.exports = {getEvents,getEventsbyName,getEventsbyId,getEventsAutocomplete,insertEvent,getEventsbyType,getEventsbyLocation,updateEventName,deleteContacto,getDistanceBetweenAddresses};
 

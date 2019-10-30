@@ -21,6 +21,11 @@ router.get('/getEvents',function(req,res)
     apiController.getEvents(req,res);
 });
 
+router.post('/getEventsbyId',function(req,res)
+{
+    console.log("leer");
+    apiController.getEventsbyId(req,res);
+});
 
 router.get('/getEventsbyName',function(req,res)
 {
