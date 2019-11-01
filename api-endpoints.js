@@ -27,7 +27,7 @@ router.post('/getEventsbyId',function(req,res)
     apiController.getEventsbyId(req,res);
 });
 
-router.get('/getEventsbyName',function(req,res)
+router.post('/getEventsbyName',function(req,res)
 {
     console.log("leer");
     apiController.getEventsbyName(req,res);
