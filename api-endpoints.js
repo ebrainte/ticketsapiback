@@ -21,10 +21,10 @@ router.get('/getEvents',function(req,res)
     apiController.getEvents(req,res);
 });
 
-router.post('/getEventsbyId',function(req,res)
+router.post('/getEventsbyId',async function(req,res)
 {
     console.log("leer");
-    apiController.getEventsbyId(req,res);
+    await apiController.getEventsbyId(req,res);
 });
 
 router.post('/getEventsbyName',function(req,res)
