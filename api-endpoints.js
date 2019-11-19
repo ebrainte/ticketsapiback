@@ -39,7 +39,7 @@ router.get('/getEventsAutoComplete',function(req,res)
     apiController.getEventsAutocomplete(req,res);
 });
 
-router.get('/getEventsbyType',function(req,res)
+router.post('/getEventsbyType',function(req,res)
 {
     console.log("leer");
     apiController.getEventsbyType(req,res);
