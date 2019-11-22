@@ -13,6 +13,7 @@ var eventSchema = new Schema({
     eventPricing: Number,
     imageUrl: String,
     starAverage: Number,
+    distance: String,
     geo: []
 });
 var Events = mongoose.model('Event', eventSchema);

@@ -27,7 +27,7 @@ router.post('/getEventsbyId',async function(req,res)
     await apiController.getEventsbyId(req,res);
 });
 
-router.post('/getEventsbyName',function(req,res)
+router.post('/getEventsbyName', async function(req,res)
 {
     console.log("leer");
     apiController.getEventsbyName(req,res);

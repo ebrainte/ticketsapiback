@@ -33,7 +33,7 @@ let getEvents = (req, res) => {
 };
 
 
-let getEventsbyName = (req, res) => {
+let getEventsbyName = async (req, res) => {
     console.log("lectura de eventos por nombre");
     //Obtener id busqueda
     let name = { eventName: { $regex: '.*' + req.body.eventName + '.*', $options: 'i' } };
@@ -47,11 +47,62 @@ let getEventsbyName = (req, res) => {
             return res.status(500).send(text);
         }
         else {
-            console.log(text);
-            return res.status(200).send(text);
+            //console.log(text);
+            console.log(req.body.address);
+            if (req.body.address) {
+                console.log("entro una direccion");
+                console.log(req.body.address);
+                getDistance(req.body.address, text).then(function (data) { //element.restaurantAddress, text).then(function(data){
+                    //console.log("ACA VIENE LA MAGIA" +  data);
+                    return (data);
+                }).then(function (content) {
+                    console.log("ACA VIENE EL CONTENT:" + content);
+                    return res.status(200).send(content);
+
+                })
+
+            } else {
+                return res.status(200).send(text);
+            }
+
+
         }
     })
 };
+
+
+
+async function getDistance(firstAddr, text) {
+
+
+
+
+    let promiseArray = text.map((value) => {
+        // console.log(value);
+        return rp({
+            uri: "https://maps.googleapis.com/maps/api/directions/json?origin=" + firstAddr + "&destination=" + value.eventAddress + "&key=AIzaSyBHfXPuQY3IGXBEFXzZ3Oo3HDqilYNVFv4",
+            json: true
+        })
+            .then(function (data) {
+                var obj = data.routes[0].legs[0].distance.text;
+                console.log(obj);
+                asd = value;
+                asd.distance = obj;
+                console.log("Distancia: " + asd);
+                return (asd);
+            })
+
+    });
+    // console.log(promiseArray);
+    // resolve(promiseArray);
+
+    return Promise.all(promiseArray);
+
+
+}
+
+
+
 
 const getEventsbyId = async (req, res) => {
     console.log("lectura de eventos por id");
@@ -67,8 +118,8 @@ const getEventsbyId = async (req, res) => {
             return res.status(500).send(text);
         }
         else {
-            geocode(text).then(function (data) { 
-                console.log("ACA VIENE LA MAGIA" +  data);
+            geocode(text).then(function (data) {
+                console.log("ACA VIENE LA MAGIA" + data);
                 res.status(200).send(data);
             })
             // console.log(text);
@@ -87,7 +138,7 @@ async function geocode(text) {
             text[0].geo[0] = res[0].latitude;
             text[0].geo[1] = res[0].longitude;
             console.log(text);
-            return(text);
+            return (text);
         })
         .catch(function (err) {
             console.log(err);
