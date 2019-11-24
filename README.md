@@ -25,8 +25,21 @@ GET
 ```
 /apiTickets/getEvents
 ```
-### Get dishes by name (not necessarily the full name)
-GET
+
+### Get events by id
+POST
+```
+/apiTickets/getEventsbyId
+
+Body:
+{
+    "id": "5db5af918e8d1157500c1f1c"
+}
+```
+
+
+### Get events by name (not necessarily the full name)
+POST
 ```
 /apiTickets/getEventsbyName
 
@@ -36,8 +49,20 @@ Body:
 }
 ```
 
-### Get dish name (for autocompletion)
-GET
+### Get events by name AND Address (not necessarily the full name)
+POST
+```
+/apiTickets/getEventsbyName
+
+Body:
+{
+    "eventName": "man",
+    "address": "Avenida Corrientes 1500, Buenos Aires, Argentina"
+}
+```
+
+### Get event name (for autocompletion)
+POST
 ```
 /apiTickets/getEventsAutocomplete
 
@@ -47,8 +72,8 @@ Body:
 }
 ```
 
-### Get dishes by type (not necessarily the full name)
-GET
+### Get events by type (not necessarily the full name)
+POST
 ```
 /apiTickets/getEventsbyType
 
@@ -58,7 +83,7 @@ Body:
 }
 ```
 
-### Get dishes by location (not necessarily the full name)
+### Get events by location (not necessarily the full name)
 GET
 ```
 /apiTickets/getEventsbyLocation
@@ -66,6 +91,26 @@ GET
 Body:
 {
     "eventLocation": "gran"
+}
+```
+
+### Buy a Ticket
+
+POST
+```
+/apiTickets/buy
+
+Body:
+{
+    "withCC": true,
+    "creditCardNumber": "4545454545454545",
+    "expiryDate": "11/25",
+    "payments": 3,
+    "fullName": "Esteban Quito",
+    "email": "esteban@quito.com",
+    "eventName": "Mana",
+    "eventPricing": 2500,
+    "eventDate": "11/12/2019"
 }
 ```
 

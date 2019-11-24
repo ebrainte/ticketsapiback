@@ -3,6 +3,7 @@ var bodyParser = require('body-parser');
 var request = require("request")
 const rp = require('request-promise')
 var NodeGeocoder = require('node-geocoder');
+const nodemailer = require("nodemailer");
 
 var options = {
     provider: 'google',
@@ -16,7 +17,7 @@ var options = {
 var geocoder = NodeGeocoder(options);
 
 let getEvents = (req, res) => {
-    console.log("Listado de Platos");
+    console.log("Listado de Eventos");
     //Listar resultados
 
     Events.find(function (err, listaEventos) {
@@ -220,6 +221,60 @@ let insertEvent = (req, res) => {
 }
 
 
+let buy = (req, res) => {
+    console.log(req.body);
+    var message;
+    var data = {
+        withCC: req.body.withCC,
+        creditCardNumber: req.body.creditCardNumber,
+        expiryDate: req.body.expiryDate,
+        payments: req.body.payments,
+        fullName: req.body.fullName,
+        email: req.body.email,
+        eventName: req.body.eventName,
+        eventPricing: req.body.eventPricing,
+        eventDate: req.body.eventDate
+    };
+
+
+    var transport = nodemailer.createTransport({
+        host: "smtp.mailtrap.io",
+        port: 2525,
+        auth: {
+          user: "1f1b2ab16594e3",
+          pass: "d720545c481b7f"
+        }
+      });
+    
+      if(data.withCC == true){
+      message = {
+        from: 'noreply@pirutickets.com',
+        to: data.email,
+        subject: 'Gracias por su Compra!',
+        text: 'Estos son los detalles de su compra:\nNombre del evento: ' + data.eventName + '\nPrecio: ' + data.eventPricing + '\nFecha: ' +  data.eventDate + '\nDatos de la TC: ' + data.creditCardNumber 
+        };
+    }
+    else{
+        message = {
+            from: 'noreply@pirutickets.com',
+            to: data.email,
+            subject: 'Gracias por su Reserva!',
+            text: 'Estos son los detalles de su reserva:\nNombre del evento: ' + data.eventName + '\nPrecio: ' + data.eventPricing + '\nFecha: ' +  data.eventDate + '\nUsted debera abonar en las siguientes 48hs o la reserva sera cancelada'
+            };
+    }
+    transport.sendMail(message, function(err, info) {
+        if (err) {
+          console.log(err)
+        } else {
+          console.log(info);
+          res.status(200).send(info);
+          
+        }
+    });
+
+}
+
+
 let getEventsbyType = (req, res) => {
     console.log("lectura de eventos por tipo");
     //Obtener id busqueda
@@ -290,5 +345,5 @@ let deleteContacto = (req, res) => {
 
 
 }
-module.exports = { getEvents, getEventsbyName, getEventsbyId, getEventsAutocomplete, insertEvent, getEventsbyType, getEventsbyLocation, updateEventName, deleteContacto, getDistanceBetweenAddresses };
+module.exports = { getEvents, getEventsbyName, getEventsbyId, getEventsAutocomplete, buy, insertEvent, getEventsbyType, getEventsbyLocation, updateEventName, deleteContacto, getDistanceBetweenAddresses };
 
